@@ -1,5 +1,3 @@
-## rsstream: A TUI RSS Reader
-
 <h1 align="center">rsstream</h1>
 <p align="center">
   <img src="https://img.shields.io/badge/Platform-Cross--Platform-blue.svg" alt="Platform">
