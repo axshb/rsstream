@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/Platform-Cross--Platform-blue.svg" alt="Platform">
   <img src="https://img.shields.io/badge/PRs-Welcome-brightgreen.svg" alt="PRs Welcome">
   <img src="https://img.shields.io/badge/Python-3%2B-blue.svg" alt="Python Version">
-  <img src="https://img.shields.io/github/last-commit/archiebhl/hwinsight.svg" alt="Last Commit">
+  <img src="https://img.shields.io/github/last-commit/axshb/rsstream.svg" alt="Last Commit">
 </p>
 
 rsstream is a simple **Terminal User Interface (TUI)** application for reading RSS feeds. It's built using the **Textual** TUI framework for Python.
