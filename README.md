@@ -1,5 +1,5 @@
 <h1 align="center">rsstream</h1>
-<p align="center"></p>rsstream is a TUI application for reading RRS feeds, built on Textual. 
+<p align="center">rsstream is a TUI application for reading RRS feeds, built on Textual.</p>
 
 ### Features
 
