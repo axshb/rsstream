@@ -24,11 +24,13 @@ As well as standard mouse/arrow keys/enter support.
 ### Developers
 
 1. Get the requirements
-```bash
-pip install -r requirements.txt
-```
+
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 2.  Run the application
+
     ```bash
     python src/main.py
     ```
