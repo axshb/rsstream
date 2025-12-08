@@ -1,15 +1,12 @@
-<h1 align="center">rsstream</h1>
-<p align="center">rsstream is a TUI application for reading RRS feeds, built on Textual.</p>
+<h1 align="center">rsstream</h1><p align="center">rsstream is a TUI application for reading RRS feeds, built on Textual.</p>
 
 ### Features
-
 - Easily add and remove RSS feed URLs.
 - Renders article content using Markdown.
 - Open the original article link in your default web browser.
 - Saves the user config in a dot file.
 
 ### Keybinds
-
 | Key | Action | Description |
 | :--- | :--- | :--- |
 | `q` | `quit` | Exit the application. |
@@ -22,7 +19,6 @@
 As well as standard mouse/arrow keys/enter support.
 
 ### Developers
-
 1. Get the requirements
 
     ```bash
@@ -37,8 +33,7 @@ As well as standard mouse/arrow keys/enter support.
 
 
 ### Commit Rules
-
-- [chore] for maintenance, build process changes, tooling, etc.
-- [docs] for documentation changes
-- [feat] for features
-- [fix] for bugfixes/optimizations. 
+- chore: for maintenance, build process changes, tooling, etc.
+- docs: for documentation changes
+- feat: for features
+- fix: for bugfixes/optimizations. 

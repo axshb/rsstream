@@ -14,10 +14,7 @@ from screens import AddFeedScreen
 
 import logging
 logger = logging.getLogger(__name__)
-
 import threading
-
-import asyncio
 
 class FeedFetched(Message):
     def __init__(self, url: str, data: dict):
@@ -46,7 +43,7 @@ class RsStream(App):
     config_data: Dict[str, Any] = {}
     current_article_link: str = ""
 
-    async def on_mount(self) -> None:
+    def on_mount(self) -> None:
         # load config/theme on startup
         self.config_data = load_config()
         self.theme = self.config_data.get("theme", "textual-dark")
@@ -56,18 +53,10 @@ class RsStream(App):
         logger.info(self.config_data)
         
         self.feed_tree = self.query_one("#feed-tree", Tree)
-        self.on_mount_async()
-    
-    @work(thread=True, exclusive=True)
-    async def on_mount_async(self):
-        logger.info(threading.active_count())
         feed_urls = self.config_data.get("feeds", [])
         
-        task = []
         for url in feed_urls:
-            task.append(asyncio.create_task(self.fetch_feed(url)))
-        results = asyncio.gather(*task)
-        await results
+            self.fetch_feed(url)
 
     def on_unmount(self) -> None:
         # save stuff before we die
@@ -86,12 +75,14 @@ class RsStream(App):
             with VerticalScroll(id="content-container"):
                 yield Markdown("Select an article...", id="article-content")
         yield Footer()
-    
+
+    @work(thread=True, exclusive=True)
     async def fetch_feed(self, url: str):
+        logging.info(threading.active_count())
         data = fetch_feed_data(url)
-        await self.on_fetched_feed(FeedFetched(url, data))
+        self.on_fetched_feed(FeedFetched(url, data))
     
-    async def on_fetched_feed(self, msg: FeedFetched):
+    def on_fetched_feed(self, msg: FeedFetched):
         url = msg.url
         data = msg.data
         logger.info(data)
