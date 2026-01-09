@@ -1,1 +1,0 @@
-1. need to refactor this: three levels: get feed titles, get everything but article content for a given feed, get article content
