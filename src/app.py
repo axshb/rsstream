@@ -46,8 +46,8 @@ class RsStream(App):
     config_data: Dict[str, Any] = {}
     current_article_link: str = ""
 
+    # app startup
     async def on_mount(self) -> None:
-        # load config/theme on startup
         self.config_data = load_config()
         self.theme = self.config_data.get("theme", "textual-dark")
         self.dark = self.config_data.get("dark_mode", True)
@@ -58,6 +58,7 @@ class RsStream(App):
         self.feed_tree = self.query_one("#feed-tree", Tree)
         self.on_mount_async()
     
+    # async app startup to get feeds
     @work(thread=True, exclusive=True)
     async def on_mount_async(self):
         logger.info(threading.active_count())
@@ -69,24 +70,26 @@ class RsStream(App):
         results = asyncio.gather(*task)
         await results
 
+    # app close
     def on_unmount(self) -> None:
         # save stuff before we die
         self.config_data["theme"] = self.theme
         self.config_data["dark_mode"] = self.dark
         save_config(self.config_data)
 
+    # composing tui components using css layout
     def compose(self) -> ComposeResult:
         yield Header()
         with Container(id="main-layout"):
             with Container(id="tree-container"):
                 tree = Tree("RSS Feeds", id="feed-tree")
-                # turn off auto_expand so manual toggling feels better
                 tree.auto_expand = False
                 yield tree
             with VerticalScroll(id="content-container"):
                 yield Markdown("Select an article...", id="article-content")
         yield Footer()
     
+    # called by async startup for each feed
     async def fetch_feed(self, url: str):
         data = fetch_feed_data(url)
         await self.on_fetched_feed(FeedFetched(url, data))
@@ -165,3 +168,24 @@ class RsStream(App):
 
     def action_scroll_text_up(self):
         self.query_one("#content-container", VerticalScroll).scroll_up()
+    
+    @work(thread=True, exclusive=True)
+    async def refresh_feeds(self):
+        # fetches feeds in a worker thread so UI doesn't freeze
+        tree = self.query_one("#feed-tree", Tree)
+        tree.clear()
+        tree.root.expand()        
+        feed_urls = self.config_data.get("feeds", [])
+        
+        for url in feed_urls:
+            # this is blocking (requests/urllib) so it needs to be inside @work
+            data = fetch_feed_data(url)
+            
+            for feed_title, items in data.items():
+                feed_node = tree.root.add(feed_title, data={"type": "feed", "url": url})
+                
+                for label, info in items.items():
+                    # stashing the whole article dict in the node data
+                    feed_node.add_leaf(label, data={"type": "article", **info})
+                
+        self.notify("Feeds updated.", timeout=2)

@@ -36,5 +36,5 @@ def save_config(config: Dict[str, Any]):
         with open(path, "w") as f:
             json.dump(config, f, indent=4)
     except IOError:
-        # logging would go here if this were a serious enterprise app
+        # logging goes here
         pass
