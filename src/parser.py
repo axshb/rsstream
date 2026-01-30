@@ -22,11 +22,10 @@ def fetch_feed_data(rss_url: str) -> Dict[str, Any]:
         title = getattr(entry, 'title', 'No Title')
         link = getattr(entry, 'link', '')
         
-        # try to parse date, fallback to "Unknown" if the feed sucks
         if hasattr(entry, 'published_parsed') and entry.published_parsed:
             date_str = time.strftime("%Y-%m-%d", entry.published_parsed)
         else:
-            date_str = "Unknown"
+            date_str = "Unknown" # if no date is available
             
         summary = getattr(entry, 'summary', 'No Content')
         stripped_summary = strip_html(summary)
